@@ -158,9 +158,9 @@ class TextMessage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (showName)
-          nameBuilder?.call(message.author.id) ??
-              UserName(author: message.author),
+        // if (showName)
+        //   nameBuilder?.call(message.author.id) ??
+        //       UserName(author: message.author),
         if (enlargeEmojis)
           if (isTextMessageTextSelectable)
             SelectableText(message.text, style: emojiTextStyle)

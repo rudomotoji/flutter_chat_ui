@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../flutter_chat_ui.dart';
 import '../../models/bubble_rtl_alignment.dart';
 import '../../models/emoji_enlargement_behavior.dart';
 import '../../util.dart';
@@ -298,27 +299,36 @@ class Message extends StatelessWidget {
     bool currentUserIsAuthor,
     bool enlargeEmojis,
   ) =>
-      bubbleBuilder != null
-          ? bubbleBuilder!(
-              _messageBuilder(),
-              message: message,
-              nextMessageInGroup: roundBorder,
-            )
-          : enlargeEmojis && hideBackgroundOnEmojiMessages
-              ? _messageBuilder()
-              : Container(
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius,
-                    color: !currentUserIsAuthor ||
-                            message.type == types.MessageType.image
-                        ? InheritedChatTheme.of(context).theme.secondaryColor
-                        : InheritedChatTheme.of(context).theme.primaryColor,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: borderRadius,
-                    child: _messageBuilder(),
-                  ),
-                );
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (showName)
+            nameBuilder?.call(message.author.id) ??
+                UserName(author: message.author),
+
+          bubbleBuilder != null
+              ? bubbleBuilder!(
+                  _messageBuilder(),
+                  message: message,
+                  nextMessageInGroup: roundBorder,
+                )
+              : enlargeEmojis && hideBackgroundOnEmojiMessages
+                  ? _messageBuilder()
+                  : Container(
+                      decoration: BoxDecoration(
+                        borderRadius: borderRadius,
+                        color: !currentUserIsAuthor ||
+                                message.type == types.MessageType.image
+                            ? InheritedChatTheme.of(context).theme.secondaryColor
+                            : InheritedChatTheme.of(context).theme.primaryColor,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: borderRadius,
+                        child: _messageBuilder(),
+                      ),
+                    ),
+        ],
+      );
 
   Widget _messageBuilder() {
     switch (message.type) {
