@@ -149,7 +149,7 @@ List<Object> calculateChatMessages(
         }
       }
 
-      if (message.type == types.MessageType.text && shouldShowName) {
+      if (shouldShowName) {
         showName = true;
         shouldShowName = false;
       }
